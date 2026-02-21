@@ -145,32 +145,32 @@ export default function HomeCategories() {
             </button>
           </div>
         </div>
-      </Container>
 
-      {/* Cards area */}
-      <div className="relative px-8 pb-0 overflow-hidden">
-        <div
-          className="grid gap-0 overflow-hidden"
-          style={{
-            gridTemplateColumns: `repeat(${VISIBLE}, 1fr)`,
-            borderRadius: "1.5rem 1.5rem 0 0",
-            backgroundColor: "#efefef",
-          }}
-        >
-          {visible.map((cat, idx) => (
-            <div
-              key={cat.id}
-              className={direction ? "card-enter" : ""}
-              style={{
-                "--enter-x": enterTranslate,
-                "--exit-x": exitTranslate,
-              }}
-            >
-              <CategoryCard cat={cat} borderRight={idx < VISIBLE - 1} />
-            </div>
-          ))}
+        {/* Cards area */}
+        <div className="relative px-8 pb-0 overflow-hidden">
+          <div
+            className="grid gap-0 overflow-hidden"
+            style={{
+              gridTemplateColumns: `repeat(${VISIBLE}, 1fr)`,
+              borderRadius: "1.5rem 1.5rem 0 0",
+              backgroundColor: "#efefef",
+            }}
+          >
+            {visible.map((cat, idx) => (
+              <div
+                key={cat.id}
+                className={direction ? "card-enter" : ""}
+                style={{
+                  "--enter-x": enterTranslate,
+                  "--exit-x": exitTranslate,
+                }}
+              >
+                <CategoryCard cat={cat} borderRight={idx < VISIBLE - 1} />
+              </div>
+            ))}
+          </div>
         </div>
-      </div>
+      </Container>
     </section>
   );
 }
