@@ -39,7 +39,7 @@ export default function Navbar() {
     >
       <Container>
         {/* Main Navbar Bar */}
-        <div className="flex w-full items-center justify-between rounded-[32px] bg-white px-4 py-4 md:px-10 md:py-6 font-rubik shadow-sm">
+        <div className="flex w-full items-center justify-between rounded-[16px] sm:rounded-[24px] bg-white px-4 py-4 md:px-10 md:py-6 font-rubik shadow-sm">
           {/* Left Section: Mobile Menu Toggle & Desktop Links */}
           <div className="flex flex-1 items-center justify-start">
             {/* Mobile Toggle */}
@@ -98,9 +98,9 @@ export default function Navbar() {
             {/* Mobile Search (Visible only on mobile) */}
             <button
               className="lg:hidden cursor-pointer hover:text-primary transition-colors"
-              aria-label="Search"
+              aria-label="User Profile"
             >
-              <Search size={24} />
+              <User size={24} />
             </button>
 
             {/* Cart (Visible on all devices) */}
@@ -142,8 +142,8 @@ export default function Navbar() {
 
             {/* Links */}
             <div className="flex-1 overflow-y-auto py-6 px-4">
-              <div className="flex flex-col gap-4">
-                {navLinks.map((link) => (
+              <div className="flex flex-col">
+                {navLinks?.map((link) => (
                   <Link
                     key={link.name}
                     to={link.href}

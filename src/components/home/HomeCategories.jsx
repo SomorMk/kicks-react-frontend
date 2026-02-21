@@ -1,50 +1,21 @@
 import { useState } from "react";
-import ProductImg1 from "../../assets/images/categories-1.png";
-import ProductImg2 from "../../assets/images/categories-2.png";
 import Container from "../common/Container";
-
-const categories = [
-  {
-    id: 1,
-    name: "Lifestyle\nShoes",
-    image: ProductImg1,
-  },
-  {
-    id: 2,
-    name: "Basketball\nShoes",
-    image: ProductImg2,
-  },
-  {
-    id: 3,
-    name: "Running\nShoes",
-    image: ProductImg1,
-  },
-  {
-    id: 4,
-    name: "Training\nShoes",
-    image: ProductImg2,
-  },
-  {
-    id: 5,
-    name: "Soccer\nShoes",
-    image: ProductImg1,
-  },
-  {
-    id: 6,
-    name: "Outdoor\nShoes",
-    image: ProductImg2,
-  },
-];
+import useGetCategories from "@/hooks/categories/useGetAategories";
 
 const VISIBLE = 2;
 
 export default function HomeCategories() {
+  // Common States
   const [startIndex, setStartIndex] = useState(0);
   const [sliding, setSliding] = useState(false);
-  const [direction, setDirection] = useState(null); // 'left' | 'right'
+  const [direction, setDirection] = useState(null);
+
+  // Categories Data Hook
+  const { categoriesList, isCategoriesLoading, isCategoriesError } =
+    useGetCategories();
 
   const canPrev = startIndex > 0;
-  const canNext = startIndex + VISIBLE < categories.length;
+  const canNext = startIndex + VISIBLE < categoriesList?.length;
 
   const slide = (dir) => {
     if (sliding) return;
@@ -61,7 +32,10 @@ export default function HomeCategories() {
     }, 400);
   };
 
-  const visible = categories.slice(startIndex, startIndex + VISIBLE);
+  const visible = categoriesList?.slice(
+    startIndex + 1,
+    startIndex + 1 + VISIBLE,
+  );
 
   // slide-out: cards exit opposite to nav direction
   // slide-in: new cards enter from the nav direction
@@ -156,10 +130,10 @@ export default function HomeCategories() {
               backgroundColor: "#efefef",
             }}
           >
-            {visible.map((cat, idx) => (
+            {visible?.map((cat, idx) => (
               <div
-                key={cat.id}
-                className={direction ? "card-enter" : ""}
+                key={cat?.id}
+                className={`${direction ? "card-enter" : ""}`}
                 style={{
                   "--enter-x": enterTranslate,
                   "--exit-x": exitTranslate,
@@ -182,36 +156,35 @@ function CategoryCard({ cat, borderRight }) {
       style={{ minHeight: "520px" }}
     >
       {/* Shoe image */}
-      <div className="flex-1 flex items-center justify-center px-10 pt-10 pb-4">
+      <div className="w-full max-h-[460px] flex-1 flex items-center justify-center">
         <img
           src={cat.image}
           alt={cat.name.replace("\n", " ")}
-          className="w-full object-contain"
-          style={{ maxHeight: "260px" }}
+          className="w-full h-full object-cover"
         />
       </div>
 
       {/* Footer row */}
-      <div className="flex items-end justify-between px-6 pb-6">
-        <h3
-          className="font-black uppercase text-neutral-900 leading-tight whitespace-pre-line"
-          style={{ fontSize: "1.35rem" }}
-        >
+      <div className="flex items-end justify-between px-6 pb-6 absolute bottom-0 left-0 w-full">
+        <h3 className="font-black uppercase text-neutral-900 leading-tight whitespace-pre-line">
           {cat.name}
         </h3>
-        <button className="w-10 h-10 rounded-lg bg-neutral-900 hover:bg-neutral-700 active:scale-95 transition-all flex items-center justify-center shrink-0 ml-4">
+
+        <button className="w-10 h-10 rounded-lg bg-neutral-900 hover:bg-neutral-700 active:scale-95 transition-all flex items-center justify-center shrink-0 ml-4 cursor-pointer">
           <svg
-            width="16"
-            height="16"
-            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 32 32"
             fill="none"
-            stroke="white"
-            strokeWidth="2.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
           >
-            <line x1="7" y1="17" x2="17" y2="7" />
-            <polyline points="7 7 17 7 17 17" />
+            <path
+              d="M10.1668 9.10565H22.8947V21.8336M22.0108 9.98954L9.10615 22.8942"
+              stroke="#E7E7E3"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
           </svg>
         </button>
       </div>
