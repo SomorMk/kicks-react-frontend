@@ -20,7 +20,7 @@ export default function HeroShowcase() {
   const [activeImg, setActiveImg] = useState(images[0]);
 
   return (
-    <div className="flex items-center justify-center p-6 font-sans">
+    <div className="flex items-center justify-center py-6 font-sans">
       <div
         className="relative w-full rounded-[50px] overflow-hidden shadow-2xl"
         style={{ aspectRatio: "16/7" }}

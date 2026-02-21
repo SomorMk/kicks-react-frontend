@@ -7,11 +7,11 @@ import Container from "@/components/common/Container";
 
 export default function Navbar() {
   return (
-    <nav className="p-8">
+    <nav className="py-8">
       <Container>
         <div className="flex w-full items-center justify-between rounded-[32px] bg-white px-10 py-6 font-rubik shadow-sm">
           {/* Left Links */}
-          <div className="flex flex-1 items-center justify-start gap-8 font-semibold text-[#232321]">
+          <div className="flex flex-1 items-center justify-start gap-8 font-semibold text-secondary">
             <Link
               to="#"
               className="flex items-center gap-1 hover:text-primary transition-colors whitespace-nowrap"
@@ -38,7 +38,7 @@ export default function Navbar() {
           </Link>
 
           {/* Right Actions */}
-          <div className="flex flex-1 items-center justify-end gap-6 text-[#232321]">
+          <div className="flex flex-1 items-center justify-end gap-6 text-secondary">
             <button className="cursor-pointer hover:text-primary transition-colors">
               <Search size={24} />
             </button>
