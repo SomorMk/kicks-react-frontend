@@ -1,43 +1,13 @@
 import React from "react";
 import ProductCard from "../common/ProductCard";
 import Container from "../common/Container";
-
-const products = [
-  {
-    id: 1,
-    name: "Adidas 4dfwd x parley running shoes",
-    price: 125,
-    isNew: true,
-    image:
-      "https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&q=80&w=800",
-  },
-  {
-    id: 2,
-    name: "Adidas 4dfwd x parley running shoes",
-    price: 125,
-    isNew: true,
-    image:
-      "https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?auto=format&fit=crop&q=80&w=800",
-  },
-  {
-    id: 3,
-    name: "Adidas 4dfwd x parley running shoes",
-    price: 125,
-    isNew: true,
-    image:
-      "https://images.unsplash.com/photo-1560769629-975ec94e6a86?auto=format&fit=crop&q=80&w=800",
-  },
-  {
-    id: 4,
-    name: "Adidas 4dfwd x parley running shoes",
-    price: 125,
-    isNew: true,
-    image:
-      "https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?auto=format&fit=crop&q=80&w=800",
-  },
-];
+import useGetProducts from "@/hooks/products/useGetProducts";
+import ProductCardSkeleton from "../skeletons/ProductCardSkeleton";
 
 export default function HomeNewDrops() {
+  // Products from API
+  const { products, isProductsLoading, isProductsError } = useGetProducts();
+
   return (
     <section className="py-8 md:py-16">
       <Container>
@@ -51,10 +21,24 @@ export default function HomeNewDrops() {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
-          {products.map((product) => (
-            <ProductCard key={product.id} {...product} />
+          {products?.slice(0, 8)?.map((product) => (
+            <ProductCard key={product?.id} product={product} />
           ))}
+
+          {isProductsLoading &&
+            !isProductsError &&
+            Array.from({ length: 4 }).map((_, index) => (
+              <ProductCardSkeleton key={index} />
+            ))}
         </div>
+
+        {products?.length > 8 && (
+          <div className="flex justify-center mt-10">
+            <button className="bg-primary text-white px-12 py-4 rounded-lg font-rubik font-semibold text-sm uppercase tracking-wider hover:bg-[#3b55c2] transition-colors">
+              View All
+            </button>
+          </div>
+        )}
       </Container>
     </section>
   );
