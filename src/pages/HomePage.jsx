@@ -1,10 +1,10 @@
-import Container from "@/components/common/Container";
 import React from "react";
+import Hero from "../components/home/Hero";
 
 export default function HomePage() {
   return (
     <div>
-      <Container>HomePage</Container>
+      <Hero />
     </div>
   );
 }
