@@ -52,70 +52,75 @@ const REVIEWS_DATA = [
 
 export default function HomeReview() {
   return (
-    <section>
-      <Container>
-        <div className="flex justify-between items-center mb-10">
-          <h2 className="text-4xl md:text-7xl font-bold uppercase text-secondary">
+    <section className="pt-10 sm:pt-16 md:pt-20">
+      <Container className="px-4 sm:px-6 lg:px-8">
+        {/* Header */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8 md:mb-10">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-bold uppercase text-secondary leading-tight">
             Reviews
           </h2>
           <Link
             to="#"
-            className="bg-primary text-white font-bold py-3 px-8 rounded-xl uppercase tracking-widest hover:brightness-110 transition-all text-sm"
+            className="bg-primary text-white font-bold py-2.5 px-6 sm:py-3 sm:px-8 rounded-xl uppercase tracking-widest hover:brightness-110 transition-all text-xs sm:text-sm self-start sm:self-auto active:scale-95"
           >
             See All
           </Link>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8">
+        {/* Reviews Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 lg:gap-8">
           {REVIEWS_DATA.map((review) => (
             <div
               key={review.id}
-              className="bg-white rounded-[32px] overflow-hidden flex flex-col"
+              className="bg-white rounded-2xl md:rounded-[32px] overflow-hidden flex flex-col shadow-sm hover:shadow-md transition-shadow"
             >
               {/* Review Header & Content */}
-              <div className="p-8 flex-1">
-                <div className="flex justify-between items-start mb-4">
-                  <div className="flex flex-col gap-1">
-                    <h4 className="text-xl font-bold text-secondary">
+              <div className="p-4 sm:p-6 md:p-8 flex-1">
+                <div className="flex justify-between items-start gap-3 mb-3 sm:mb-4">
+                  <div className="flex flex-col gap-1 min-w-0">
+                    <h4 className="text-base sm:text-lg md:text-xl font-bold text-secondary line-clamp-1">
                       {review.title}
                     </h4>
-                    <p className="text-secondary/80 text-sm">
+                    <p className="text-secondary/80 text-xs sm:text-sm line-clamp-2">
                       {review.content}
                     </p>
                   </div>
-                  {/* User Avatar Tag (Empty as requested) */}
-                  <div className="w-12 h-12 rounded-full bg-[#E7E7E3] overflow-hidden">
+
+                  {/* User Avatar */}
+                  <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-[#E7E7E3] overflow-hidden shrink-0">
                     <img
                       src={review.user.avatar}
                       alt={review.user.name}
                       className="w-full h-full object-cover"
+                      loading="lazy"
                     />
                   </div>
                 </div>
 
                 {/* Rating */}
-                <div className="flex items-center gap-2">
-                  <div className="flex gap-1">
+                <div className="flex items-center gap-2 mt-2">
+                  <div className="flex gap-0.5">
                     {[...Array(5)].map((_, i) => (
                       <Star
                         key={i}
-                        size={18}
+                        size={16}
                         className="fill-[#FFA52F] text-[#FFA52F]"
                       />
                     ))}
                   </div>
-                  <span className="font-bold text-secondary">
+                  <span className="font-bold text-secondary text-sm">
                     {review.rating.toFixed(1)}
                   </span>
                 </div>
               </div>
 
-              {/* Main Image Tag (Empty as requested) */}
+              {/* Main Image */}
               <div className="aspect-4/3 w-full bg-[#E7E7E3] overflow-hidden">
                 <img
                   src={review.image}
                   alt="Review Highlight"
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
+                  loading="lazy"
                 />
               </div>
             </div>
