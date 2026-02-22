@@ -4,8 +4,11 @@ import { Search, User, Menu, X } from "lucide-react";
 import { Link } from "react-router-dom";
 import { IoMdArrowDropdown } from "react-icons/io";
 import Container from "@/components/common/Container";
+import { useSelector } from "react-redux";
 
 export default function Navbar() {
+  const { items } = useSelector((state) => state.cart);
+  const cartCount = items?.length || 0;
   // Common States
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -97,7 +100,7 @@ export default function Navbar() {
               </button>
             </div>
 
-            {/* Mobile Search (Visible only on mobile) */}
+            {/* Mobile Search */}
             <button
               className="lg:hidden cursor-pointer hover:text-primary transition-colors"
               aria-label="User Profile"
@@ -105,15 +108,15 @@ export default function Navbar() {
               <User size={24} />
             </button>
 
-            {/* Cart (Visible on all devices) */}
-            <button
+            <Link
+              to={"/cart"}
               className="relative cursor-pointer hover:text-primary transition-colors"
               aria-label="Cart"
             >
               <div className="flex bg-[#ffa52f] rounded-full w-8 h-8 md:w-10 md:h-10 items-center justify-center text-sm font-bold text-white shadow-sm">
-                0
+                {cartCount}
               </div>
-            </button>
+            </Link>
           </div>
         </div>
       </Container>
@@ -182,8 +185,11 @@ export default function Navbar() {
 
             {/* Footer Actions (Optional) */}
             <div className="p-6 border-t border-gray-100 bg-gray-50">
-              <button className="w-full py-3 bg-primary text-white font-rubik font-semibold rounded-xl hover:opacity-90 transition-opacity">
-                Sign In
+              <button
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="w-full py-3 bg-primary text-white font-rubik font-semibold rounded-xl hover:opacity-90 transition-opacity"
+              >
+                Close
               </button>
             </div>
           </div>
