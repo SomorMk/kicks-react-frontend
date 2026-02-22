@@ -105,7 +105,7 @@ export default function RelatedProducts({ currentProductId }) {
         </div>
 
         {/* Indicators - Dynamic based on productsPerView */}
-        <div className="flex justify-start sm:justify-center mt-2 md:mt-4 px-4 sm:px-0">
+        <div className="flex justify-center sm:justify-center mt-2 md:mt-4 px-4 sm:px-0">
           <div className="flex gap-2 h-1.5 items-center">
             {Array.from({
               length: Math.ceil(
@@ -116,8 +116,8 @@ export default function RelatedProducts({ currentProductId }) {
                 key={i}
                 className={`h-1.5 rounded-full transition-all duration-300 ${
                   activeIndex === i
-                    ? "w-8 sm:w-14 bg-primary"
-                    : "w-8 sm:w-14 bg-[#C8C8C3]"
+                    ? "w-3 sm:w-14 bg-primary"
+                    : "w-3 sm:w-14 bg-[#C8C8C3]"
                 }`}
               />
             ))}
