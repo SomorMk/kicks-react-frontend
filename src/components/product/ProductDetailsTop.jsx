@@ -2,11 +2,13 @@ import React, { useEffect, useState } from "react";
 import { Heart } from "lucide-react";
 import Container from "../common/Container";
 import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { addToCart } from "@/Redux/Slices/cartSlice";
 import toast from "react-hot-toast";
 
 export default function ProductDetailsTop({ productDetails }) {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   // Unavailable Datas
   const sizes = [38, 39, 40, 41, 42, 43, 44, 45, 46, 47];
@@ -24,22 +26,27 @@ export default function ProductDetailsTop({ productDetails }) {
   const [selectedColor, setSelectedColor] = useState(colors[0]);
   const [activeImageIndex, setActiveImageIndex] = useState(0);
 
+  const createCartItem = () => ({
+    id: productDetails.id,
+    title: productDetails.title,
+    price: productDetails.price,
+    image: productDetails.images[0],
+    category: productDetails.category?.name || "Running Shoes",
+    size: selectedSize,
+    color: selectedColor,
+    quantity: 1,
+  });
+
   const handleAddToCart = () => {
     if (!productDetails) return;
-
-    const cartItem = {
-      id: productDetails.id,
-      title: productDetails.title,
-      price: productDetails.price,
-      image: productDetails.images[0],
-      category: productDetails.category?.name || "Running Shoes",
-      size: selectedSize,
-      color: selectedColor,
-      quantity: 1,
-    };
-
-    dispatch(addToCart(cartItem));
+    dispatch(addToCart(createCartItem()));
     toast.success("Added to cart!");
+  };
+
+  const handleBuyItNow = () => {
+    if (!productDetails) return;
+    dispatch(addToCart(createCartItem()));
+    navigate("/cart");
   };
 
   return (
@@ -204,7 +211,10 @@ export default function ProductDetailsTop({ productDetails }) {
                   <Heart size={20} className="sm:w-6 sm:h-6" />
                 </button>
               </div>
-              <button className="w-full bg-primary text-white font-bold py-3 sm:py-4 rounded-xl uppercase tracking-widest hover:brightness-110 active:scale-95 transition-all text-xs sm:text-sm">
+              <button
+                onClick={handleBuyItNow}
+                className="w-full bg-primary text-white font-bold py-3 sm:py-4 rounded-xl uppercase tracking-widest hover:brightness-110 active:scale-95 transition-all text-xs sm:text-sm"
+              >
                 Buy It Now
               </button>
             </div>
