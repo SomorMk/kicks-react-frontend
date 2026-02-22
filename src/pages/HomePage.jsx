@@ -6,7 +6,7 @@ import HomeReview from "@/components/home/HomeReview";
 
 export default function HomePage() {
   return (
-    <div className="flex flex-col gap-20 pb-20">
+    <div className="flex flex-col">
       <Hero />
       <HomeNewDrops />
       <HomeCategories />
