@@ -4,6 +4,7 @@ import ErrorPage from "@/pages/ErrorPage";
 import HomePage from "@/pages/HomePage";
 import ProductPage from "@/pages/ProductPage";
 import CartPage from "@/pages/CartPage";
+import ThankYouPage from "@/pages/ThankYouPage";
 
 const router = createBrowserRouter([
   // Error Page
@@ -28,6 +29,10 @@ const router = createBrowserRouter([
       {
         path: "/cart",
         element: <CartPage />,
+      },
+      {
+        path: "/thank-you",
+        element: <ThankYouPage />,
       },
     ],
   },

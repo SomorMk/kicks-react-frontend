@@ -1,8 +1,19 @@
 import React from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { clearCart } from "@/Redux/Slices/cartSlice";
 
 export default function OrderSummary() {
   const { items } = useSelector((state) => state.cart);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const handleCheckout = () => {
+    // Navigate to Thank You page
+    navigate("/thank-you");
+    // Clear cart (optional but usually happens after checkout)
+    dispatch(clearCart());
+  };
 
   const subtotal = items.reduce(
     (acc, item) => acc + item.price * item.quantity,
@@ -41,6 +52,7 @@ export default function OrderSummary() {
       <div className="flex flex-col gap-3 md:gap-4">
         <button
           disabled={items.length === 0}
+          onClick={handleCheckout}
           className="w-full bg-secondary text-white py-3.5 sm:py-4 rounded-xl font-rubik font-bold uppercase tracking-widest hover:bg-black active:scale-95 transition-all disabled:opacity-50 disabled:cursor-not-allowed text-sm"
         >
           Checkout
