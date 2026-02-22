@@ -21,7 +21,7 @@ export default function HeroShowcase() {
 
   return (
     <div className="flex items-center justify-center py-6 md:py-10 font-sans w-full">
-      <div className="relative w-full overflow-hidden shadow-2xl transition-all duration-500">
+      <div className="relative w-full overflow-hidden shadow-2xl transition-all duration-500 rounded-3xl md:rounded-[50px]">
         <div className="relative w-full aspect-8/10 md:aspect-16/7 rounded-3xl md:rounded-[50px] overflow-hidden bg-neutral-900">
           {/* Background image */}
           <div

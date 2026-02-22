@@ -6,10 +6,11 @@ import { IoMdArrowDropdown } from "react-icons/io";
 import Container from "@/components/common/Container";
 
 export default function Navbar() {
+  // Common States
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
-  // Optional: Add shadow on scroll
+  // Adding shadow on scroll
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 20);
@@ -18,7 +19,7 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Prevent body scroll when mobile menu is open
+  // Preventing body scroll when mobile menu is open
   useEffect(() => {
     if (isMobileMenuOpen) {
       document.body.style.overflow = "hidden";
@@ -27,6 +28,7 @@ export default function Navbar() {
     }
   }, [isMobileMenuOpen]);
 
+  // Navigation Links
   const navLinks = [
     { name: "New Drops 🔥", href: "#" },
     { name: "Men", href: "#", hasDropdown: true },
@@ -38,9 +40,9 @@ export default function Navbar() {
       className={`relative py-4 md:py-8 transition-all duration-300 ${scrolled ? "shadow-md" : ""}`}
     >
       <Container>
-        {/* Main Navbar Bar */}
+        {/* Main Navbar */}
         <div className="flex w-full items-center justify-between rounded-[16px] sm:rounded-[24px] bg-white px-4 py-4 md:px-10 md:py-6 font-rubik shadow-sm">
-          {/* Left Section: Mobile Menu Toggle & Desktop Links */}
+          {/* Mobile Menu Toggle & Desktop Links */}
           <div className="flex flex-1 items-center justify-start">
             {/* Mobile Toggle */}
             <button
@@ -53,20 +55,20 @@ export default function Navbar() {
 
             {/* Desktop Links */}
             <div className="hidden lg:flex items-center justify-start gap-6 xl:gap-8 font-semibold text-secondary">
-              {navLinks.map((link) => (
+              {navLinks?.map((link) => (
                 <Link
-                  key={link.name}
-                  to={link.href}
+                  key={link?.name}
+                  to={link?.href}
                   className="flex items-center gap-1 hover:text-primary transition-colors whitespace-nowrap"
                 >
-                  {link.name}
-                  {link.hasDropdown && <IoMdArrowDropdown size={18} />}
+                  {link?.name}
+                  {link?.hasDropdown && <IoMdArrowDropdown size={18} />}
                 </Link>
               ))}
             </div>
           </div>
 
-          {/* Center: Logo */}
+          {/* Logo */}
           <div className="flex flex-1 items-center justify-center">
             <Link to={"/"} className="flex items-center justify-center">
               <img
@@ -77,7 +79,7 @@ export default function Navbar() {
             </Link>
           </div>
 
-          {/* Right Section: Actions */}
+          {/* Actions */}
           <div className="flex flex-1 items-center justify-end gap-4 md:gap-6 text-secondary">
             {/* Desktop Search & User */}
             <div className="hidden lg:flex items-center gap-6">
