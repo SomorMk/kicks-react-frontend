@@ -11,7 +11,7 @@ export default function CartPage() {
       {/* Banner Section */}
       <CartBanner />
 
-      <Container className="w-full px-8">
+      <Container className="w-full px-0 sm:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 lg:gap-20">
           {/* Left Column: Bag Items */}
           <div className="lg:col-span-2">
