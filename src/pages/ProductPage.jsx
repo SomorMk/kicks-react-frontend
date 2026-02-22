@@ -1,6 +1,6 @@
 import ProductDetailSkeleton from "@/components/skeletons/ProductDetailSkeleton";
 import ProductDetailsTop from "@/components/product/ProductDetailsTop";
-import RelatedProducts from "@/components/product/RelatedProducts"; // Added import
+import RelatedProducts from "@/components/product/RelatedProducts";
 import useGetProductDetails from "@/hooks/products/useGetProductDetails";
 import { useParams } from "react-router-dom";
 

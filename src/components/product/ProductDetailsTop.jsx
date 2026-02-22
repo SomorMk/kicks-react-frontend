@@ -39,7 +39,7 @@ export default function ProductDetailsTop({ productDetails }) {
     };
 
     dispatch(addToCart(cartItem));
-    toast.success("Added to Bag!");
+    toast.success("Added to cart!");
   };
 
   return (
