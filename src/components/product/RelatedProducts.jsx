@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import ProductCard from "../common/ProductCard";
 import Container from "../common/Container";
 import useGetProducts from "@/hooks/products/useGetProducts";
@@ -10,24 +10,12 @@ export default function RelatedProducts({ currentProductId }) {
   const { products, isProductsLoading, isProductsError } = useGetProducts();
   const scrollRef = useRef(null);
   const [activeIndex, setActiveIndex] = useState(0);
+  const [productsPerView, setProductsPerView] = useState(1);
 
   // Filter out the current product and limit to 12
   const relatedProducts = products
     ?.filter((p) => p.id !== currentProductId)
     ?.slice(0, 12);
-
-  const scroll = (direction) => {
-    if (scrollRef.current) {
-      const containerWidth = scrollRef.current.clientWidth;
-      const gap = 24;
-      const scrollAmount = containerWidth + gap;
-
-      scrollRef.current.scrollBy({
-        left: direction === "left" ? -scrollAmount : scrollAmount,
-        behavior: "smooth",
-      });
-    }
-  };
 
   const handleScroll = () => {
     if (scrollRef.current) {
@@ -38,28 +26,54 @@ export default function RelatedProducts({ currentProductId }) {
     }
   };
 
+  useEffect(() => {
+    const updateProductsPerView = () => {
+      if (window.innerWidth >= 1024) setProductsPerView(4);
+      else if (window.innerWidth >= 640) setProductsPerView(2);
+      else setProductsPerView(1);
+    };
+
+    updateProductsPerView();
+    window.addEventListener("resize", updateProductsPerView);
+    return () => window.removeEventListener("resize", updateProductsPerView);
+  }, []);
+
+  // Update scroll function to use productsPerView
+  const scroll = (direction) => {
+    if (scrollRef.current) {
+      const cardWidth = scrollRef.current.offsetWidth / productsPerView;
+      const scrollAmount = direction === "left" ? -cardWidth : cardWidth;
+      scrollRef.current.scrollBy({ left: scrollAmount, behavior: "smooth" });
+    }
+  };
+
   return (
-    <section className="py-12 bg-[#e7e7e3]">
-      <Container>
+    <section className="py-8 md:py-12 bg-[#e7e7e3]">
+      <Container className="px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className="flex items-center justify-between mb-8">
-          <h2 className="text-4xl md:text-5xl lg:text-7xl font-rubik font-bold uppercase text-secondary">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 md:mb-8">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-7xl font-rubik font-bold uppercase text-secondary leading-tight">
             You may also like
           </h2>
-          <div className="flex gap-2">
+          <div className="flex gap-2 self-start sm:self-auto">
             <button
               onClick={() => scroll("left")}
-              className="w-10 h-10 flex items-center justify-center bg-[#C8C8C3] hover:bg-[#b0b0ad] transition-colors rounded-lg"
+              disabled={activeIndex === 0}
+              className="w-10 h-10 flex items-center justify-center bg-[#C8C8C3] hover:bg-[#b0b0ad] disabled:opacity-50 disabled:cursor-not-allowed transition-colors rounded-lg active:scale-95"
               aria-label="Previous products"
             >
-              <ChevronLeft size={24} className="text-secondary" />
+              <ChevronLeft size={20} className="text-secondary sm:size-6" />
             </button>
             <button
               onClick={() => scroll("right")}
-              className="w-10 h-10 flex items-center justify-center bg-secondary hover:bg-black transition-colors rounded-lg"
+              disabled={
+                activeIndex >=
+                Math.ceil((relatedProducts?.length || 0) / productsPerView) - 1
+              }
+              className="w-10 h-10 flex items-center justify-center bg-secondary hover:bg-black disabled:opacity-50 disabled:cursor-not-allowed transition-colors rounded-lg active:scale-95"
               aria-label="Next products"
             >
-              <ChevronRight size={24} className="text-white" />
+              <ChevronRight size={20} className="text-white sm:size-6" />
             </button>
           </div>
         </div>
@@ -68,13 +82,14 @@ export default function RelatedProducts({ currentProductId }) {
         <div
           ref={scrollRef}
           onScroll={handleScroll}
-          className="flex overflow-x-hidden gap-4 md:gap-6 no-scrollbar pb-8 snap-x snap-mandatory"
+          className="flex overflow-x-auto gap-3 sm:gap-4 md:gap-6 no-scrollbar pb-8 snap-x snap-mandatory scroll-smooth -mx-4 px-4 sm:mx-0 sm:px-0"
+          style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
         >
           {isProductsLoading && !isProductsError
-            ? Array.from({ length: 4 }).map((_, index) => (
+            ? Array.from({ length: productsPerView }).map((_, index) => (
                 <div
                   key={index}
-                  className="w-full sm:w-[calc(50%-8px)] lg:w-[calc(25%-18px)] shrink-0"
+                  className="w-[calc(100%-12px)] sm:w-[calc(50%-16px)] lg:w-[calc(25%-18px)] shrink-0 snap-center"
                 >
                   <ProductCardSkeleton />
                 </div>
@@ -82,23 +97,27 @@ export default function RelatedProducts({ currentProductId }) {
             : relatedProducts?.map((product) => (
                 <div
                   key={product?.id}
-                  className="w-full sm:w-[calc(50%-8px)] lg:w-[calc(25%-18px)] shrink-0 snap-start"
+                  className="w-[calc(100%-12px)] sm:w-[calc(50%-16px)] lg:w-[calc(25%-18px)] shrink-0 snap-center"
                 >
                   <ProductCard product={product} />
                 </div>
               ))}
         </div>
 
-        {/* Indicators */}
-        <div className="flex justify-start sm:justify-center mt-4">
+        {/* Indicators - Dynamic based on productsPerView */}
+        <div className="flex justify-start sm:justify-center mt-2 md:mt-4 px-4 sm:px-0">
           <div className="flex gap-2 h-1.5 items-center">
             {Array.from({
-              length: Math.ceil((relatedProducts?.length || 0) / 4),
+              length: Math.ceil(
+                (relatedProducts?.length || 0) / productsPerView,
+              ),
             }).map((_, i) => (
               <div
                 key={i}
                 className={`h-1.5 rounded-full transition-all duration-300 ${
-                  activeIndex === i ? "w-14 bg-primary" : "w-14 bg-[#C8C8C3]"
+                  activeIndex === i
+                    ? "w-8 sm:w-14 bg-primary"
+                    : "w-8 sm:w-14 bg-[#C8C8C3]"
                 }`}
               />
             ))}

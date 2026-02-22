@@ -6,10 +6,9 @@ import { addToCart } from "@/Redux/Slices/cartSlice";
 import toast from "react-hot-toast";
 
 export default function ProductDetailsTop({ productDetails }) {
-  // Global States
   const dispatch = useDispatch();
 
-  // Unavailable Datas from API
+  // Unavailable Datas
   const sizes = [38, 39, 40, 41, 42, 43, 44, 45, 46, 47];
   const outOfStockSizes = [39, 40];
   const colors = [
@@ -23,8 +22,8 @@ export default function ProductDetailsTop({ productDetails }) {
   // Common States
   const [selectedSize, setSelectedSize] = useState(38);
   const [selectedColor, setSelectedColor] = useState(colors[0]);
+  const [activeImageIndex, setActiveImageIndex] = useState(0);
 
-  // Handle Add to Cart
   const handleAddToCart = () => {
     if (!productDetails) return;
 
@@ -48,34 +47,72 @@ export default function ProductDetailsTop({ productDetails }) {
       <Container className="px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8">
           {/* Left Section: Image Gallery */}
-          <div className="lg:col-span-2 flex flex-col gap-4">
-            {/* Main Image - Featured on mobile */}
-            <div className="aspect-square rounded-3xl overflow-hidden bg-white shadow-sm">
-              <img
-                src={productDetails?.images?.[0]}
-                alt={`${productDetails?.name} - main view`}
-                className="w-full h-full object-cover"
-              />
+          <div className="lg:col-span-2">
+            {/* Desktop Gallery */}
+            <div className="hidden lg:grid grid-cols-2 gap-4">
+              {productDetails?.images?.map((img, index) => (
+                <div
+                  key={index}
+                  className="aspect-square rounded-3xl overflow-hidden bg-white"
+                >
+                  <img
+                    src={img}
+                    alt={`${productDetails?.title} - view ${index + 1}`}
+                    className="w-full h-full object-cover"
+                    loading={index === 0 ? "eager" : "lazy"}
+                  />
+                </div>
+              ))}
             </div>
 
-            {/* Thumbnail Grid - Scrollable on mobile */}
-            {productDetails?.images?.length > 1 && (
-              <div className="grid grid-cols-4 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-                {productDetails.images.map((img, index) => (
-                  <div
+            {/* Mobile Gallery */}
+            <div className="lg:hidden flex flex-col gap-4">
+              {/* Main Image Area */}
+              <div className="relative aspect-square rounded-3xl overflow-hidden bg-[#ECEEF0] flex flex-col items-center justify-center">
+                <img
+                  src={productDetails?.images?.[activeImageIndex]}
+                  alt={productDetails?.title}
+                  className="w-full h-full object-contain transition-all duration-300"
+                />
+
+                {/* Pagination Dots */}
+                <div className="absolute bottom-6 flex gap-2">
+                  {productDetails?.images?.map((_, index) => (
+                    <button
+                      key={index}
+                      onClick={() => setActiveImageIndex(index)}
+                      className={`w-2 h-2 rounded-full transition-all ${
+                        activeImageIndex === index
+                          ? "bg-primary"
+                          : "bg-secondary/30"
+                      }`}
+                      aria-label={`Go to image ${index + 1}`}
+                    />
+                  ))}
+                </div>
+              </div>
+
+              {/* Thumbnails */}
+              <div className="flex gap-3 overflow-x-auto no-scrollbar py-2">
+                {productDetails?.images?.map((img, index) => (
+                  <button
                     key={index}
-                    className="aspect-square rounded-2xl overflow-hidden bg-white cursor-pointer border-2 border-transparent hover:border-secondary transition-all active:scale-95"
+                    onClick={() => setActiveImageIndex(index)}
+                    className={`relative w-24 h-24 sm:w-32 sm:h-32 rounded-2xl overflow-hidden shrink-0 bg-white transition-all ring-2 ${
+                      activeImageIndex === index
+                        ? "ring-primary"
+                        : "ring-transparent"
+                    }`}
                   >
                     <img
                       src={img}
-                      alt={`${productDetails?.name} - view ${index + 1}`}
+                      alt={`Thumbnail ${index + 1}`}
                       className="w-full h-full object-cover"
-                      loading={index === 0 ? "eager" : "lazy"}
                     />
-                  </div>
+                  </button>
                 ))}
               </div>
-            )}
+            </div>
           </div>
 
           {/* Right Section: Product Details */}
@@ -98,12 +135,12 @@ export default function ProductDetailsTop({ productDetails }) {
               <span className="font-bold uppercase text-xs sm:text-sm tracking-wider text-secondary">
                 Color
               </span>
-              <div className="flex gap-3 flex-wrap">
+              <div className="flex gap-3 md:gap-4 flex-wrap">
                 {colors?.map((color) => (
                   <button
                     key={color.name}
                     onClick={() => setSelectedColor(color)}
-                    className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full cursor-pointer border-2 transition-all focus:outline-none focus:ring-2 focus:ring-secondary/50 ${
+                    className={`w-8 h-8 rounded-full cursor-pointer border-2 transition-all focus:outline-none focus:ring-2 focus:ring-secondary/50 ${
                       selectedColor.name === color.name
                         ? "border-secondary scale-110"
                         : "border-transparent hover:scale-105"
@@ -140,7 +177,7 @@ export default function ProductDetailsTop({ productDetails }) {
                           ? "bg-[#d1d1cc] text-[#a8a8a1] cursor-not-allowed opacity-50"
                           : isActive
                             ? "bg-secondary text-white"
-                            : "bg-white text-secondary border border-[#d1d1cc] hover:border-secondary"
+                            : "bg-white text-secondary border border-transparent hover:border-secondary"
                       }`}
                       aria-label={`Select size ${size}${isOutOfStock ? " (out of stock)" : ""}`}
                     >
