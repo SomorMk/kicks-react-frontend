@@ -121,5 +121,5 @@ This project was created as a frontend implementation task for **Zavisoft**.
 
 - Live URL: [kicks-react-frontend.vercel.app](https://kicks-react-frontend.vercel.app/)
 - Author: [SomorMk](https://github.com/SomorMk)
-- Email: [EMAIL_ADDRESS](samormk6@gmail.com)
+- Email: [samormk6@gmail.com](samormk6@gmail.com)
 - WhatsApp/Phone: [+8801902011859](https://wa.me/+8801902011859)
